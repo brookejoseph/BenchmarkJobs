@@ -6,6 +6,9 @@ function App() {
   const inputRef = useRef(null);
   const [currentOption, setCurrentOption] = useState('drop');
   const [benchmarkUrl, setBenchmarkUrl] = useState('');
+  const [benchmarkId, setBenchmarkId] = useState('');
+  const [benchmarkName, setBenchmarkName] = useState('');
+  const [benchmarkStatus, setBenchmarkStatus] = useState('');
 
   useEffect(() => {
     fetch('/helloworld')
@@ -23,7 +26,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ benchmarkUrl }),
+        body: JSON.stringify({ benchmarkUrl, benchmarkName, benchmarkStatus }),
       });
       const data = await response.json();
       console.log('response', data);
@@ -47,6 +50,7 @@ function App() {
       <>
       <h3>Pick which job you're doing</h3>
       <select onChange={(e) => setCurrentOption(e.target.value)} value={currentOption}>
+        <option value="drop">Select an option</option>
         <option value="submit">Submit a Job</option>
         <option value="run">Run a Job</option>
         <option value="compare">Compare Jobs</option>
@@ -55,8 +59,14 @@ function App() {
       )}
 
       {currentOption === 'submit' && (
-        <div>
-          <h1>Submit your benchmarks here</h1>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column' }}>
+          <h3>What is your benchmark name</h3>
+          <input
+            type="benchmarkName"
+            value={benchmarkName}
+            onChange={(e) => setBenchmarkName(e.target.value)}
+          />
+          <h3>Submit your benchmarks here</h3>
           <input
             type="text"
             value={benchmarkUrl}
@@ -68,9 +78,14 @@ function App() {
 
       {currentOption === 'run' && (
         <div>
-          <h1>Run a Job</h1>
-          <button onClick={handleRunJob}>Run Job</button>
-        </div>
+        <h1>Submit your benchmarks here</h1>
+        <input
+          type="text"
+          value={benchmarkUrl}
+          onChange={(e) => setBenchmarkUrl(e.target.value)}
+        />
+        <button onClick={handleSubmit}>Submit</button>
+      </div>
       )}
       
       {currentOption === 'compare' && (

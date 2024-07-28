@@ -14,20 +14,29 @@ def hello():
 @app.route('/helloworld/grabbinginput', methods=['POST'])
 def grabbing_input():
     data = request.get_json()
-    print(data) 
+    print(data)
     url = data['benchmarkUrl'] 
+    name = data['benchmarkName']
+    print('url', url)
+    print('name', name)
+    database.append({"url": url, "name": name, "status": "submitted"})
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
-    print(soup)
-    print(res)
-    return jsonify({'response': soup.prettify()})  # Return HTML as a string inside JSON
+    value = soup.find(id="dark-mode-native-sheet")
+    return jsonify({'response': value})
+
+def submit_data():
+    data = request.get_json()
+    print(data)
+    return jsonify({'response': data})
 
 
-@app.route('/helloworld/running', methods=['POST'])
-def grabbing_input():
-    id = request.get_json()
-    
-    return jsonify({'response': soup.prettify()}) 
+
+database = [
+        {"url": 1, "name": "John Doe", "status": "submitted"},
+        {"url": 2, "name": "Jane Doe", "status": "complete"}
+        ]
+
 
 if __name__ == '__main__':
     app.run(debug=True)
